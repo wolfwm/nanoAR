@@ -61,7 +61,7 @@ class ViewController: UIViewController, ARSessionDelegate {
         })
         
         var cancellableSquare: AnyCancellable? = nil
-        cancellableSquare = Entity.loadModelAsync(named: "3dobjects/cube.obj").sink(
+        cancellableSquare = Entity.loadModelAsync(named: "3dobjects/frame.obj").sink(
             receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     print("Error: Unable to load model: \(error.localizedDescription)")
