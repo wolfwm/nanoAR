@@ -14,6 +14,7 @@
 		79DBA93323F7283100624889 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79DBA93123F7283100624889 /* LaunchScreen.storyboard */; };
 		79DBA93B23F729E700624889 /* character in Resources */ = {isa = PBXBuildFile; fileRef = 79DBA93A23F729E700624889 /* character */; };
 		79DBA93D23F731ED00624889 /* 3dobjects in Resources */ = {isa = PBXBuildFile; fileRef = 79DBA93C23F731ED00624889 /* 3dobjects */; };
+		8749D79823FDCB490067C4B6 /* CustomEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8749D79723FDCB490067C4B6 /* CustomEntity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		79DBA93423F7283100624889 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		79DBA93A23F729E700624889 /* character */ = {isa = PBXFileReference; lastKnownFileType = folder; path = character; sourceTree = "<group>"; };
 		79DBA93C23F731ED00624889 /* 3dobjects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = 3dobjects; sourceTree = "<group>"; };
+		8749D79723FDCB490067C4B6 /* CustomEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomEntity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				79DBA92823F7282F00624889 /* ViewController.swift */,
+				8749D79723FDCB490067C4B6 /* CustomEntity.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -160,6 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				79DBA92923F7282F00624889 /* ViewController.swift in Sources */,
+				8749D79823FDCB490067C4B6 /* CustomEntity.swift in Sources */,
 				79DBA92723F7282F00624889 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

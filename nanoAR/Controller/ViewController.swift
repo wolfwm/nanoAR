@@ -42,6 +42,11 @@ class ViewController: UIViewController, ARSessionDelegate {
     let blbOffset: SIMD3<Float> = [-0.8,-0.6,0]
     var blbAnchor = AnchorEntity()
     
+    let motion = PhysicsBodyComponent()
+    let collision = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
+    let body = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
+    var cancellables = [AnyCancellable]()
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         arView.session.delegate = self
@@ -177,11 +182,20 @@ class ViewController: UIViewController, ARSessionDelegate {
             
         })
     }
+        
+    
     
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
          for anchor in anchors {
              guard let bodyAnchor = anchor as? ARBodyAnchor else { continue }
             
+            arView.scene.subscribe(to: CollisionEvents.Began.self) { (collision) in
+                print("\(collision.entityA) colidiou com \(collision.entityB)")
+            }.store(in: &cancellables)
+            
+            character?.components.set([motion, collision, body])
+            trButton?.components.set([motion, collision, body])
+
             
             // Update the position of the character anchor's position.
             let bodyPosition = simd_make_float3(bodyAnchor.transform.columns.3)
@@ -206,12 +220,16 @@ class ViewController: UIViewController, ARSessionDelegate {
                 tlbAnchor.addChild(tlButton)
                 brbAnchor.addChild(brButton)
                 blbAnchor.addChild(blButton)
+                                
                 
                 trButton.orientation = simd_quatf(angle: .pi/2, axis: [0,0,1])
                 brButton.orientation = simd_quatf(angle: .pi/2, axis: [0,0,1])
                 tlButton.orientation = simd_quatf(angle: -(.pi/2), axis: [0,0,1])
                 blButton.orientation = simd_quatf(angle: -(.pi/2), axis: [0,0,1])
+            
             }
         }
     }
+  
 }
+
