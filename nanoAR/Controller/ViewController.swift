@@ -17,7 +17,7 @@ class ViewController: UIViewController, ARSessionDelegate {
     
     // The 3D character to display.
     var character: BodyTrackedEntity?
-    let characterOffset: SIMD3<Float> = [0, 0, 0] // Offset the character by one meter to the left
+    let characterOffset: SIMD3<Float> = [0, 0, 0]
     let characterAnchor = AnchorEntity()
     
     var square: ModelEntity?
@@ -42,14 +42,56 @@ class ViewController: UIViewController, ARSessionDelegate {
     let blbOffset: SIMD3<Float> = [-0.8,-0.6,0]
     var blbAnchor = AnchorEntity()
     
+    var acttrButton: ModelEntity?
+    let acttrbOffset: SIMD3<Float> = [0.8,0.6,0]
+    var acttrbAnchor = AnchorEntity()
+    
+    var acttlButton: ModelEntity?
+    let acttlbOffset: SIMD3<Float> = [-0.8,0.6,0]
+    var acttlbAnchor = AnchorEntity()
+    
+    var actbrButton: ModelEntity?
+    let actbrbOffset: SIMD3<Float> = [0.8,-0.6,0]
+    var actbrbAnchor = AnchorEntity()
+    
+    var actblButton: ModelEntity?
+    let actblbOffset: SIMD3<Float> = [-0.8,-0.6,0]
+    var actblbAnchor = AnchorEntity()
+    
+    
+    
+    
     let motion = PhysicsBodyComponent()
     let collision = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
+    var simpleMaterial = SimpleMaterial(color: .black, isMetallic: true)
     let body = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
+    
+    let motion2 = PhysicsBodyComponent()
+       let collision2 = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
+       var simpleMaterial2 = SimpleMaterial(color: .black, isMetallic: true)
+       let body2 = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
+    
+    let motion3 = PhysicsBodyComponent()
+       let collision3 = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
+       var simpleMaterial3 = SimpleMaterial(color: .black, isMetallic: true)
+       let body3 = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
+    
+    let motion4 = PhysicsBodyComponent()
+       let collision4 = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
+       var simpleMaterial4 = SimpleMaterial(color: .black, isMetallic: true)
+       let body4 = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
+    
+    let motion5 = PhysicsBodyComponent()
+       let collision5 = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
+       var simpleMaterial5 = SimpleMaterial(color: .black, isMetallic: true)
+       let body5 = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
     var cancellables = [AnyCancellable]()
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         arView.session.delegate = self
+    
         
         // If the iOS device doesn't support body tracking, raise a developer error for
         // this unhandled case.
@@ -67,6 +109,11 @@ class ViewController: UIViewController, ARSessionDelegate {
         arView.scene.addAnchor(tlbAnchor)
         arView.scene.addAnchor(brbAnchor)
         arView.scene.addAnchor(blbAnchor)
+        
+        arView.scene.addAnchor(acttrbAnchor)
+        arView.scene.addAnchor(acttlbAnchor)
+        arView.scene.addAnchor(actbrbAnchor)
+        arView.scene.addAnchor(actblbAnchor)
 
         // Asynchronously load the 3D character.
         var cancellable: AnyCancellable? = nil
@@ -88,7 +135,7 @@ class ViewController: UIViewController, ARSessionDelegate {
         })
         
         var cancellableSquare: AnyCancellable? = nil
-        cancellableSquare = Entity.loadModelAsync(named: "3dobjects/frame.obj").sink(
+        cancellableSquare = Entity.loadModelAsync(named: "3dobjects/frame.usdz").sink(
             receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     print("Error: Unable to load model: \(error.localizedDescription)")
@@ -107,7 +154,7 @@ class ViewController: UIViewController, ARSessionDelegate {
         })
         
         var cancellableTRButton: AnyCancellable? = nil
-        cancellableTRButton = Entity.loadModelAsync(named: "3dobjects/button.obj").sink(
+        cancellableTRButton = Entity.loadModelAsync(named: "3dobjects/button.usdz").sink(
             receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     print("Error: Unable to load model: \(error.localizedDescription)")
@@ -126,7 +173,7 @@ class ViewController: UIViewController, ARSessionDelegate {
         })
         
         var cancellableTLButton: AnyCancellable? = nil
-        cancellableTLButton = Entity.loadModelAsync(named: "3dobjects/button.obj").sink(
+        cancellableTLButton = Entity.loadModelAsync(named: "3dobjects/button.usdz").sink(
             receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     print("Error: Unable to load model: \(error.localizedDescription)")
@@ -145,7 +192,7 @@ class ViewController: UIViewController, ARSessionDelegate {
         })
         
         var cancellableBRButton: AnyCancellable? = nil
-        cancellableBRButton = Entity.loadModelAsync(named: "3dobjects/button.obj").sink(
+        cancellableBRButton = Entity.loadModelAsync(named: "3dobjects/button.usdz").sink(
             receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     print("Error: Unable to load model: \(error.localizedDescription)")
@@ -164,7 +211,7 @@ class ViewController: UIViewController, ARSessionDelegate {
         })
         
         var cancellableBLButton: AnyCancellable? = nil
-        cancellableBLButton = Entity.loadModelAsync(named: "3dobjects/button.obj").sink(
+        cancellableBLButton = Entity.loadModelAsync(named: "3dobjects/button.usdz").sink(
             receiveCompletion: { completion in
                 if case let .failure(error) = completion {
                     print("Error: Unable to load model: \(error.localizedDescription)")
@@ -181,21 +228,122 @@ class ViewController: UIViewController, ARSessionDelegate {
             }
             
         })
+        
+        var cancellableactTRButton: AnyCancellable? = nil
+        cancellableactTRButton = Entity.loadModelAsync(named: "3dobjects/button2.usdz").sink(
+            receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    print("Error: Unable to load model: \(error.localizedDescription)")
+                }
+                cancellableactTRButton?.cancel()
+        }, receiveValue: { (button: Entity) in
+            if let button = button as? ModelEntity {
+                // Scale the character to human size
+                button.scale = self.buttonScale
+                self.acttrButton = button
+                cancellableactTRButton?.cancel()
+            } else {
+                print("Error: Unable to load model as Entity")
+            }
+            
+        })
+        
+        var cancellableactTLButton: AnyCancellable? = nil
+        cancellableactTLButton = Entity.loadModelAsync(named: "3dobjects/button2.usdz").sink(
+            receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    print("Error: Unable to load model: \(error.localizedDescription)")
+                }
+                cancellableactTLButton?.cancel()
+        }, receiveValue: { (button: Entity) in
+            if let button = button as? ModelEntity {
+                // Scale the character to human size
+                button.scale = self.buttonScale
+                self.acttlButton = button
+                cancellableactTLButton?.cancel()
+            } else {
+                print("Error: Unable to load model as Entity")
+            }
+            
+        })
+        
+        var cancellableactBRButton: AnyCancellable? = nil
+        cancellableactBRButton = Entity.loadModelAsync(named: "3dobjects/button2.usdz").sink(
+            receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    print("Error: Unable to load model: \(error.localizedDescription)")
+                }
+                cancellableactBRButton?.cancel()
+        }, receiveValue: { (button: Entity) in
+            if let button = button as? ModelEntity {
+                // Scale the character to human size
+                button.scale = self.buttonScale
+                self.actbrButton = button
+                cancellableactBRButton?.cancel()
+            } else {
+                print("Error: Unable to load model as Entity")
+            }
+            
+        })
+        
+        var cancellableactBLButton: AnyCancellable? = nil
+        cancellableactBLButton = Entity.loadModelAsync(named: "3dobjects/button2.usdz").sink(
+            receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    print("Error: Unable to load model: \(error.localizedDescription)")
+                }
+                cancellableactBLButton?.cancel()
+        }, receiveValue: { (button: Entity) in
+            if let button = button as? ModelEntity {
+                // Scale the character to human size
+                button.scale = self.buttonScale
+                self.actblButton = button
+                cancellableactBLButton?.cancel()
+            } else {
+                print("Error: Unable to load model as Entity")
+            }
+            
+        })
     }
         
-    
-    
+     
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
          for anchor in anchors {
              guard let bodyAnchor = anchor as? ARBodyAnchor else { continue }
-            
             arView.scene.subscribe(to: CollisionEvents.Began.self) { (collision) in
-                print("\(collision.entityA) colidiou com \(collision.entityB)")
+                
+                
+                if collision.entityB == self.trButton || collision.entityA == self.trButton{
+                    if let button = self.acttrButton {
+                        self.acttrbAnchor.addChild(button)
+                        collision.entityB.removeFromParent()
+                }}
+                else if collision.entityB == self.tlButton || collision.entityA == self.tlButton{
+                    if let button = self.acttlButton {
+                        self.acttlbAnchor.addChild(button)
+                        collision.entityB.removeFromParent()
+                }}
+                        else if collision.entityB == self.brButton || collision.entityA == self.brButton{
+                    if let button = self.actbrButton {
+                        self.actbrbAnchor.addChild(button)
+                        collision.entityB.removeFromParent()
+                }} else if collision.entityB == self.blButton || collision.entityA == self.blButton{
+                    if let button = self.actblButton {
+                        self.actblbAnchor.addChild(button)
+                        collision.entityB.removeFromParent()
+                }}
+                
+                
             }.store(in: &cancellables)
             
             character?.components.set([motion, collision, body])
             trButton?.components.set([motion, collision, body])
-
+            tlButton?.components.set([motion, collision, body])
+            brButton?.components.set([motion, collision, body])
+            blButton?.components.set([motion, collision, body])
+        
+            
+            
             
             // Update the position of the character anchor's position.
             let bodyPosition = simd_make_float3(bodyAnchor.transform.columns.3)
@@ -206,14 +354,27 @@ class ViewController: UIViewController, ARSessionDelegate {
             tlbAnchor.position = bodyPosition + tlbOffset
             brbAnchor.position = bodyPosition + brbOffset
             blbAnchor.position = bodyPosition + blbOffset
+            
+            acttrbAnchor.position = bodyPosition + acttrbOffset
+            acttlbAnchor.position = bodyPosition + acttlbOffset
+            actbrbAnchor.position = bodyPosition + actbrbOffset
+            actblbAnchor.position = bodyPosition + actblbOffset
             // Also copy over the rotation of the body anchor, because the skeleton's pose
             // in the world is relative to the body anchor's rotation.
             characterAnchor.orientation = Transform(matrix: bodyAnchor.transform).rotation
             
-            if let character = character, character.parent == nil, let square = square, square.parent == nil, let trButton = trButton, trButton.parent == nil, let tlButton = tlButton, tlButton.parent == nil, let brButton = brButton, brButton.parent == nil, let blButton = blButton, blButton.parent == nil {
-                // Attach the character to its anchor as soon as
-                // 1. the body anchor was detected and
-                // 2. the character was loaded.
+            if let character = character, character.parent == nil,
+                let square = square, square.parent == nil,
+                let trButton = trButton, trButton.parent == nil,
+                let tlButton = tlButton, tlButton.parent == nil,
+                let brButton = brButton, brButton.parent == nil,
+                let blButton = blButton, blButton.parent == nil,
+                
+                let actblButton = actblButton, actblButton.parent == nil,
+                let actbrButton = actbrButton, actbrButton.parent == nil,
+                let acttlButton = acttlButton, acttlButton.parent == nil,
+                let acttrButton = acttrButton, acttrButton.parent == nil {
+                
                 characterAnchor.addChild(character)
                 squareAnchor.addChild(square)
                 trbAnchor.addChild(trButton)
@@ -221,11 +382,15 @@ class ViewController: UIViewController, ARSessionDelegate {
                 brbAnchor.addChild(brButton)
                 blbAnchor.addChild(blButton)
                                 
-                
                 trButton.orientation = simd_quatf(angle: .pi/2, axis: [0,0,1])
                 brButton.orientation = simd_quatf(angle: .pi/2, axis: [0,0,1])
                 tlButton.orientation = simd_quatf(angle: -(.pi/2), axis: [0,0,1])
                 blButton.orientation = simd_quatf(angle: -(.pi/2), axis: [0,0,1])
+                
+                acttrButton.orientation = simd_quatf(angle: .pi/2, axis: [0,0,1])
+                actbrButton.orientation = simd_quatf(angle: .pi/2, axis: [0,0,1])
+                acttlButton.orientation = simd_quatf(angle: -(.pi/2), axis: [0,0,1])
+                actblButton.orientation = simd_quatf(angle: -(.pi/2), axis: [0,0,1])
             
             }
         }
