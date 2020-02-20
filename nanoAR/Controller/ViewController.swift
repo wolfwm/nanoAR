@@ -58,40 +58,16 @@ class ViewController: UIViewController, ARSessionDelegate {
     let actblbOffset: SIMD3<Float> = [-0.8,-0.6,0]
     var actblbAnchor = AnchorEntity()
     
-    
-    
-    
     let motion = PhysicsBodyComponent()
     let collision = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
     var simpleMaterial = SimpleMaterial(color: .black, isMetallic: true)
     let body = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
     
-    let motion2 = PhysicsBodyComponent()
-       let collision2 = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
-       var simpleMaterial2 = SimpleMaterial(color: .black, isMetallic: true)
-       let body2 = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
-    
-    let motion3 = PhysicsBodyComponent()
-       let collision3 = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
-       var simpleMaterial3 = SimpleMaterial(color: .black, isMetallic: true)
-       let body3 = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
-    
-    let motion4 = PhysicsBodyComponent()
-       let collision4 = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
-       var simpleMaterial4 = SimpleMaterial(color: .black, isMetallic: true)
-       let body4 = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
-    
-    let motion5 = PhysicsBodyComponent()
-       let collision5 = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
-       var simpleMaterial5 = SimpleMaterial(color: .black, isMetallic: true)
-       let body5 = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
     var cancellables = [AnyCancellable]()
-    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         arView.session.delegate = self
-    
         
         // If the iOS device doesn't support body tracking, raise a developer error for
         // this unhandled case.
@@ -304,47 +280,98 @@ class ViewController: UIViewController, ARSessionDelegate {
             }
             
         })
+        
+//        arView.scene.subscribe(to: CollisionEvents.Began.self) { (collision) in
+//
+//            collision.entityB.removeFromParent()
+//
+//            print("\(collision.entityA) has collided with \(collision.entityB)")
+//
+//            self.acttrbAnchor.addChild(self.acttrButton!)
+//            self.acttlbAnchor.addChild(self.acttlButton!)
+//            self.actbrbAnchor.addChild(self.actbrButton!)
+//            self.actblbAnchor.addChild(self.actblButton!)
+//
+//            self.buttonRandomizer()
+//
+//        }.store(in: &cancellables)
+//        
+//        character?.components.set([motion, collision, body])
+//        trButton?.components.set([motion, collision, body])
+//        tlButton?.components.set([motion, collision, body])
+//        brButton?.components.set([motion, collision, body])
+//        blButton?.components.set([motion, collision, body])
+        
+    }
+    
+    func buttonRandomizer() {
+       let randNum = Int.random(in: (1...4))
+        
+        switch randNum {
+            case 1:
+                for button in acttrbAnchor.children {
+                    if button == acttrButton {
+                        acttrButton?.removeFromParent()
+                    }
+                }
+            trbAnchor.addChild(self.trButton!)
+            
+            case 2:
+            for button in acttlbAnchor.children {
+                if button == acttlButton {
+                    acttlButton?.removeFromParent()
+                }
+            }
+            tlbAnchor.addChild(self.tlButton!)
+            
+            case 3:
+            for button in actbrbAnchor.children {
+                if button == actbrButton {
+                    actbrButton?.removeFromParent()
+                }
+            }
+            brbAnchor.addChild(self.brButton!)
+            
+            case 4:
+            for button in actblbAnchor.children {
+                if button == actblButton {
+                    actblButton?.removeFromParent()
+                }
+            }
+            blbAnchor.addChild(self.blButton!)
+            
+            default:
+            print("Error")
+        }
     }
         
      
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
          for anchor in anchors {
              guard let bodyAnchor = anchor as? ARBodyAnchor else { continue }
-            arView.scene.subscribe(to: CollisionEvents.Began.self) { (collision) in
-                
-                
-                if collision.entityB == self.trButton || collision.entityA == self.trButton{
-                    if let button = self.acttrButton {
-                        self.acttrbAnchor.addChild(button)
-                        collision.entityB.removeFromParent()
-                }}
-                else if collision.entityB == self.tlButton || collision.entityA == self.tlButton{
-                    if let button = self.acttlButton {
-                        self.acttlbAnchor.addChild(button)
-                        collision.entityB.removeFromParent()
-                }}
-                        else if collision.entityB == self.brButton || collision.entityA == self.brButton{
-                    if let button = self.actbrButton {
-                        self.actbrbAnchor.addChild(button)
-                        collision.entityB.removeFromParent()
-                }} else if collision.entityB == self.blButton || collision.entityA == self.blButton{
-                    if let button = self.actblButton {
-                        self.actblbAnchor.addChild(button)
-                        collision.entityB.removeFromParent()
-                }}
-                
-                
-            }.store(in: &cancellables)
-            
+            if cancellables.isEmpty {
+                arView.scene.subscribe(to: CollisionEvents.Began.self) { (collision) in
+                    
+                    collision.entityB.removeFromParent()
+
+                    print("\(collision.entityA) has collided with \(collision.entityB)")
+
+                    self.acttrbAnchor.addChild(self.acttrButton!)
+                    self.acttlbAnchor.addChild(self.acttlButton!)
+                    self.actbrbAnchor.addChild(self.actbrButton!)
+                    self.actblbAnchor.addChild(self.actblButton!)
+
+//                    self.buttonRandomizer()
+
+                }.store(in: &cancellables)
+            }
+
             character?.components.set([motion, collision, body])
             trButton?.components.set([motion, collision, body])
             tlButton?.components.set([motion, collision, body])
             brButton?.components.set([motion, collision, body])
             blButton?.components.set([motion, collision, body])
         
-            
-            
-            
             // Update the position of the character anchor's position.
             let bodyPosition = simd_make_float3(bodyAnchor.transform.columns.3)
             
@@ -377,10 +404,12 @@ class ViewController: UIViewController, ARSessionDelegate {
                 
                 characterAnchor.addChild(character)
                 squareAnchor.addChild(square)
-                trbAnchor.addChild(trButton)
-                tlbAnchor.addChild(tlButton)
-                brbAnchor.addChild(brButton)
-                blbAnchor.addChild(blButton)
+                acttrbAnchor.addChild(acttrButton)
+                acttlbAnchor.addChild(acttlButton)
+                actbrbAnchor.addChild(actbrButton)
+                actblbAnchor.addChild(actblButton)
+                
+                self.buttonRandomizer()
                                 
                 trButton.orientation = simd_quatf(angle: .pi/2, axis: [0,0,1])
                 brButton.orientation = simd_quatf(angle: .pi/2, axis: [0,0,1])
