@@ -59,7 +59,7 @@ class ViewController: UIViewController, ARSessionDelegate {
     var actblbAnchor = AnchorEntity()
     
     let motion = PhysicsBodyComponent()
-    let collision = CollisionComponent(shapes: [.generateBox(size: [1,1,1])])
+    let collision = CollisionComponent(shapes: [.generateBox(size: [1.05,1.05,1.05])])
     var simpleMaterial = SimpleMaterial(color: .black, isMetallic: true)
     let body = PhysicsBodyComponent(massProperties: .init(mass: 5), material: .default, mode: .static)
     
@@ -361,7 +361,7 @@ class ViewController: UIViewController, ARSessionDelegate {
                     self.actbrbAnchor.addChild(self.actbrButton!)
                     self.actblbAnchor.addChild(self.actblButton!)
 
-//                    self.buttonRandomizer()
+                    self.buttonRandomizer()
 
                 }.store(in: &cancellables)
             }
